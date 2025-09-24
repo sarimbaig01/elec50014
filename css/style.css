@@ -2,6 +2,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
+    
     background-color: #f5f5dc;
     /* Light beige background */
     margin: 0;
@@ -11,14 +12,17 @@ body {
     min-height: 100vh;
 }
 
+
 section.statement {
-    border: 1px solid #ccc; /* Adds borders on all sides */
-    padding: 20px;          /* Adds spacing inside the section */
-    margin-top: 0;          /* Removes only the top margin */
-    margin-right: 20px;     /* Keeps the right margin */
-    margin-bottom: 20px;    /* Keeps the bottom margin */
-    margin-left: 20px;      /* Keeps the left margin */
-}
+    border: 1px solid #ccc;   /* Adds borders on all sides */
+    padding:20px;            /* Adds spacing inside the section */
+    margin: 0;                /* Removes all auto-centering */
+    margin-bottom: 20px;      /* Optional: keep spacing below */
+    text-align: justify;
+    width: 70%;               /* or keep 100% if you want it full-width */
+    max-width: none;
+  }
+  
 
 section.statement h2 {
     margin: 0; /* Removes default margins for all child elements */
@@ -36,24 +40,33 @@ h1.align-with-statement {
 
 
 h1 {
-    color: #4E342E;
+    color: black;
+
     /* Dark brown */
 }
 
 h2 {
-    color: #6A5ACD;
-    /* Slate blue */
+    color: #000080;
 }
 
 
 h3 {
     color: #8B4513;
-    /* Dark olive green */
 }
 
 h4 {
     color: #D2691E;
-    /* Rusty orange */
+
+}
+
+pre[class*="language-"] {
+    max-height: 400px;       /* adjust as needed */
+    overflow: auto;          /* enables both horizontal and vertical scrolling */
+    white-space: pre;        /* prevent line wrapping */
+    padding: 1em;
+    background: #f5f2f0;     /* Prism default background */
+    border-radius: 0.5em;
+    box-sizing: border-box;
 }
 
 .no-indent {
@@ -65,19 +78,23 @@ code {
     font-family: Consolas, "Courier New", monospace;
 }
 
-.code-container {
-    padding: 0px;
-    /* Reduced padding to 10 pixels */
-    width: 90%;
-    /* Make the container wider */
-    max-width: 1000px;
-    /* Increase max width */
-    margin: 20px 0;
-    /* Remove auto margins and reduce to just vertical margins */
-    left: 5%;
-    /* Move the container closer to the left of the screen */
-    /*border: 1px solid #ccc; /* Thin border, slightly darker than body's background color */
+code, pre {
+    -webkit-font-smoothing: antialiased;  /* Or 'none' */
+    -moz-osx-font-smoothing: grayscale;
 }
+
+.token.operator {
+    background-color: rgba(255, 255, 255, 0.1); /* or similar */
+  }
+
+
+.code-container {
+    width: 100%;       /* Full width of .statement */
+    max-width: none;   /* Remove any limiting width */
+    margin: 20px 0;    /* Vertical spacing */
+    padding: 0px;      /* or adjust as needed */
+}
+
 
 /* Add this to your CSS file */
 .algorithm p {
@@ -221,10 +238,6 @@ table.atable td {
 }
 
 
-.statement {
-    margin-right: 270px;
-    /* Increase right margin to make more space for the TOC */
-}
 
 legend {
     color: burgundy;
@@ -237,67 +250,51 @@ fieldset {
     color: burgundy;
     /* Set the text color inside the fieldset to burgundy */
 }
-
 .toc {
     position: fixed;
     top: 100px;
-    /* Adjust based on your preference */
-    right: 40px;
-    /* Move the TOC a little towards the right */
+    left: calc(75vw + 20px);
     width: 220px;
-    /* Adjust the width as necessary */
-    padding: 10px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.toc a {
-    display: inline;
-    /* Ensure each link takes up the full width and appears on its own line */
-   
-    text-decoration: underline;
-    /* Underline the links */
-    color: black;
-    /* Set link color to black */
-    position: relative;
-    /* Enable positioning of pseudo-element */
-    padding-left: 2px;
-    /* Reduce padding to bring text closer to bullet */
-}
-
-.toc a::before {
-    /*content: "•";*/
-    /* Bullet point character */
-    position: absolute;
-    /* Position relative to the link */
-    left: 0px;
-    /* Adjust distance from the link text */
-    color: black;
-    /* Same color as the link text */
-}
-
-.toc a.sub-item {
-    padding-left: 0px;
-    /* Indent sub-items more */
-}
-
-.toc a.sub-item::before {
-    content: "•";
-    /* Bullet point character */
-    position: absolute;
-    /* Position relative to the link */
-    left: 25px;
-    /* Adjust distance from the link text to align bullets */
-    color: black;
-    /* Same color as the link text */
-}
+    padding: 16px;
+    border-radius: 10px;
+  
+    background-color: #fffaf0; /* subtle off-white (e.g. 'Floral White') */
+    border: 1px solid #d8cfc4; /* soft tan border */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.05); /* very soft shadow */
+  
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  .toc h5 {
+    margin-top: 0;
+    font-size: 16px;
+    color: #6a4e3d; /* muted brown tone */
+    border-bottom: 1px solid #e0d6c8;
+    padding-bottom: 4px;
+  }
+  
+  .toc a {
+    display: block;
+    margin-bottom: 8px;
+    padding-left: 6px;
+    color: #4b3a2f;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+  }
+  
+  .toc a:hover {
+    color: #3a2b20;
+    border-left: 3px solid #a37b5e;
+    background-color: #f9f5ec;
+  }
 
 .toc a:hover {
     text-decoration: underline;
     /* Underline links on hover for better visibility */
 }
-
 
 img {
     max-width: 100%;
@@ -494,6 +491,35 @@ video::-webkit-media-controls {
 video::-webkit-media-controls-overlay-enclosure {
     display: none !important;
 }
+
+.pseudocode {
+  background-color: #f6f8fa;          /* GitHub code background */
+  border: 1px solid #d0d7de;          /* subtle border like GitHub */
+  border-radius: 6px;
+  padding: 16px;
+  margin: 1.5em 0;
+  overflow: auto;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #24292f;                     /* GitHub default text */
+  font-family: SFMono-Regular, Consolas, 'Liberation Mono',
+               Menlo, Courier, monospace;
+  box-shadow: none;
+}
+
+.pseudocode pre {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  white-space: pre-wrap;              /* preserve formatting but allow wrap */
+  word-break: break-word;
+}
+
+
+
+
+
 
 
 /* Media queries for mobile devices 

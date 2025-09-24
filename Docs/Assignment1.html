@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Assignment 1: Shell Implementation</title>
+
+    <div class="common-head">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--<base href="/ss/">-->
+        <!-- Style sheets -->
+        <link rel="stylesheet" href="/css/prism.css">
+        <link rel="stylesheet" href="/css/style.css">
+
+        <!-- Scripts -->
+        <script src="/js/prism.js"></script>
+        <script src="/js/loadCodeAndThemes.js"></script>
+        <script src="/js/insertCode.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    </div>
+</head>
+
+
+<body>
+    <a href="https://sarimbaig01.github.io/ss/" class="back-link top-right">← Back</a>
+
+    <div class="toc">
+        <section class="toc-content">
+            <h5>Table of Contents</h5>
+            <a href="#intro">Introduction</a>
+            <a href="#p1">1. Basic Commands</a>
+            <a href="#p2">2. Commands with Redirection</a>
+            <a href="#p3">3. Support for <code><strong>cd</strong></code></a>
+            <a href="#p4">4. Commands with Pipes</a>
+            <a href="#p5">5. Batched Commands</a>
+            <a href="#p6">6. PE 1: Subshells</a>
+            <a href="#p7">7. PE 2: Nested Subshells</a>
+            <a href="#p8">8. Further Enhancements</a>
+        </section>
+    </div>
+
+
+    <h1 class="align-with-statement"> Assignment 1: Shell Implementation</h1>
+    <section class="statement">
+        <div id="intro">
+            <h2>Introduction</h2>
+
+            <p>This assignment involves building a functional shell in C, implementing many of the
+                fundamental
+                features
+                found in shells such as Bash.</p>
+
+            <p>The shell, named <code><strong>s3</strong></code> (software-systems-shell), will be developed
+                incrementally throughout
+                the
+                assignment.</p>
+
+            <p>A basic code structure is provided to scaffold your implementation; however, there is ample
+                opportunity
+                for you to explore and innovate beyond it.</p>
+
+            <p>You are allowed to pair-program (i.e., two members of a designated group may work together),
+                except
+                for
+                the Proposed Extensions (PEs), which are optional and must be completed individually.</p>
+
+            <p>To achieve a mark of 75% on this assignment, the core functionalities (excluding the PEs)
+                must be
+                fully working. Marks above 75% will depend on the extent to which the PEs, or any other
+                extensions
+                you have implemented, are functioning successfully. In the case of self-proposed extensions,
+                they
+                will be evaluated based on the level of challenge they present.</p>
+
+            <p>Each member of a pair must maintain their own copy of the implementation. This copy may be
+                identical
+                to
+                their partner’s—except for the PEs—or may contain differences due to personal initiatives.
+                Assessment will be done through a viva, with both partners present.</p>
+
+            <p>Let's begin!</p>
+        </div>
+
+        <div id="p1">
+            <h3><small>1. </small>Basic Commands</h3>
+
+            <p>In this part, you will implement the code needed to execute basic shell commands. I'm
+                providing some initial code, so first let's look at how it's organized and what it contains.</p>
+
+
+            <h4>Code organization and initial contents</h4>
+
+            <p>The code is organized into three separate files:</p>
+
+            <p>
+            <ul>
+                <li><code><strong>s3main.c</strong></code> – contains the <code><strong>main</strong></code>
+                    function of the shell, where the overall control flow is defined.</li>
+                <li><code><strong>s3.h</strong></code> – contains function declarations, constant
+                    definitions, and
+                    required library includes.</li>
+                <li><code><strong>s3.c</strong></code> – provides the implementations of the functions
+                    declared in
+                    the header file.</li>
+            </ul>
+            </p>
+
+            <p>The following blocks show the initial contents of each file. </p>
+
+            <p><code><strong>s3main.c: </strong></code></p>
+            <div class="code-container" data-filename="../c/s3main_1.c">
+                <pre><code class="language-c"></code></pre>
+            </div>
+
+            <p><code><strong>s3.h: </strong></code></p>
+            <div class="code-container" data-filename="../c/s3_1.h">
+                <pre><code class="language-c"></code></pre>
+            </div>
+
+            <p><code><strong>s3.c: </strong></code></p>
+            <div class="code-container" data-filename="../c/s3_1.c">
+                <pre><code class="language-c"></code></pre>
+            </div>
+
+            <p>You can copy the codes, create the corresponding files, and compile/link them as below:</p>
+
+            <div class="code-container" data-filename="inline">
+                <pre class="language-bash"><code>$ gcc *.c -o s3</code></pre>
+            </div>
+
+            <p>All three files should be in you current working directory (cwd) (this would also be the
+                folder to
+                open in VS Code).</p>
+
+            <h4>How to approach the code</h4>
+
+            <p>In approaching this (and subsequent) codes, please keep the following points in mind:</p>
+
+            <ul>
+                <li>Please read the comments carefully — they contain instructions about which functions to implement
+                    and
+                    what various parts of the code do.</li>
+
+                <li>Please pay attention to the basic design and functional decomposition. Apply functional
+                    decomposition
+                    (more so in subsequent sections than here) to keep the code readable, manageable, and bug-free.</li>
+
+                <li>As standard practice, get information about system calls, and library functions such as
+                    <code><strong>fgets</strong></code>,
+                    <code><strong>strtok</strong></code>, etc., first from their
+                    <code><strong>man</strong></code> pages. The <code><strong>man</strong></code> pages give accurate,
+                    system-level details on a command's usage and options.
+                </li>
+
+                <li>
+                    Please read through the code and familiarize yourself with the C-style of coding. In particular, be
+                    sure to
+                    be clear about how pointers work. Pay attention to various parameters and their types, e.g.,
+                    <code><strong>char *args[]</strong></code> (an null-terminated array of character pointers, where
+                    each pointer in the array points to a C string containing an argument to the command being launched)
+                    and
+                    <code><strong>int argsc</strong></code> (the count of arguments in args).
+                </li>
+
+                <li>For dealing with parsing-related tasks, it would
+                    be essential to understand how <code><strong>C strings</strong></code> are handled (in short, they
+                    are
+                    null-terminated character arrays).
+                </li>
+            </ul>
+
+            <h4>What to implement in this section</h4>
+
+            <p>Currently, the shell displays a prompt, but does nothing when a command is entered.</p>
+
+            <p>Starting with a reading of the <code><strong>fork</strong></code>, <code><strong>execvp</strong></code>,
+                and <code><strong>wait</strong></code> system calls from lectures 2 and 3 and the codes provided in
+                those lectures, implement the following two functions:
+            <ul>
+                <li><code><strong>launch_program: </strong></code> uses fork to create a new child process (see the code
+                    structure for this from the lecture)</li>
+                <li><code><strong>child: </strong></code>uses execvp to replace the process image with that of the
+                    provided command (see the code structure for this from the lecture)</li>
+            </ul>
+
+            <h4>Test your code thoroughly</h4>
+            <p>Even with this small amount of code, several basic commands can now run on
+                <code><strong>s3</strong></code>.
+            </p>
+            <p>In particular, most commands that do not use redirection operators or pipes (to be covered in subsequent
+                sections) should run.
+            <p>
+            <p>Test your program thoroughly by running a number of such commands.</p>
+            <p>As a starting point, here is a short list of commands that you can run to test
+                <code><strong>s3</strong></code> at this stage.
+            </p>
+            <p>Note: I have provided a file called phrases.txt for testing purposes. Alternatively, this could be any
+                file of your choice. I assume in the following commands that phrases.txt exists inside a folder called
+                txt within your current working directory.</p>
+
+            <p>In each case below, pay attention to the contents of <code><strong>char *args[]</strong></code> being
+                passed to the command.</p>
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Test Command</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>whoami</strong></td>
+                        <td>Shows your current username</td>
+                    </tr>
+                    <tr>
+                        <td><strong>pwd</strong></td>
+                        <td>Prints the current working directory</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ls</strong></td>
+                        <td>Lists files and folders in the current directory</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ls</strong> -R</td>
+                        <td>Recursively lists files in all subdirectories</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cal</strong></td>
+                        <td>Displays the current month’s calendar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cal</strong> -y</td>
+                        <td>Shows the full calendar for the current year</td>
+                    </tr>
+                    <tr>
+                        <td><strong>clear</strong></td>
+                        <td>Clears the terminal screen</td>
+                    </tr>
+                    <tr>
+                        <td><strong>man</strong> cat</td>
+                        <td>Opens the manual page for the <strong>cat</strong> command</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cat</strong> txt/phrases.txt</td>
+                        <td>Displays the contents of <strong>phrases.txt</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>uniq</strong> txt/phrases.txt</td>
+                        <td>Removes duplicate lines (assumes sorted input)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>wc</strong> txt/phrases.txt</td>
+                        <td>Counts lines, words, and characters in the file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>sort</strong> txt/phrases.txt</td>
+                        <td>Sorts the lines in the file alphabetically</td>
+                    </tr>
+                    <tr>
+                        <td><strong>grep</strong> burn txt/phrases.txt</td>
+                        <td>Finds lines containing the string "burn"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>grep</strong> -n burn txt/phrases.txt</td>
+                        <td>Finds "burn" and shows matching line numbers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cp</strong> txt/phrases.txt txt/phrases_copy.txt</td>
+                        <td>Copies the file to a new file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>touch</strong> txt/new_file.txt</td>
+                        <td>Creates an empty file named <strong>new_file.txt</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>chmod</strong> a-w txt/phrases_copy.txt</td>
+                        <td>Makes the file read-only for all users</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ls</strong> -l txt/phrases_copy.txt</td>
+                        <td>Shows file details like permissions and size</td>
+                    </tr>
+                    <tr>
+                        <td><strong>less</strong> txt/phrases.txt</td>
+                        <td>Opens file in scrollable view (press <strong>q</strong> to quit)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>exit</strong></td>
+                        <td>Exits the current shell session (you’ll need to implement this command in the
+                            shell)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div id="p2">
+            <h3><small>2. </small>Commands with Redirection</h3>
+            <p>
+                In each command above (except <code><strong>exit</strong></code>), we are able to see the output on the
+                terminal because the standard output stream <code><strong>stdout</strong></code> is, by default,
+                directed to the terminal device.
+            </p>
+
+            <p>
+                Similarly, for commands that take input, this input is received through the standard input stream
+                <code><strong>stdin</strong></code>, which is also directed to the terminal by default.
+            </p>
+
+            <p>
+                You can think of these streams as literally "flowing" streams of data, which can be redirected to other
+                places (or redirected from other sources in the case of input) — and shells provide users with the
+                ability to perform such redirection.
+            </p>
+
+            <p>Consider the following command:</p>
+
+            <div class="code-container" data-filename="inline">
+                <pre
+                    class="language-bash"><code>$ sort txt/phrases.txt <span class="token operator">&gt;</span> txt/phrases_sorted.txt</code></pre>
+            </div>
+
+            <p>The output of <code><strong>sort</strong></code> is being redirected to a file instead of being displayed
+                on the terminal.</p>
+
+            <p>This command will not work as intended in <code><strong>s3</strong></code> because we have not
+                implemented redirection — which is a feature of the shell, not of the command itself.</p>
+
+
+
+            <h4>The new s3main.c</h4>
+
+            <p>Implement the functions <code><strong>command_with_redirection</strong></code> and
+                <code><strong>launch_program_with_redirection</strong></code> that can be used in the
+                <code><strong>main</strong></code> in the following following fashion.
+            </p>
+
+            <p><code><strong>s3main.c: </strong></code></p>
+            <div class="code-container" data-filename="../c/s3main_2.c">
+                <pre><code class="language-c"></code></pre>
+            </div>
+
+            <p>The declarations of the new functions go into <code><strong>s3.h</strong></code>, and the implementations
+                go into
+                <code><strong>s3.c</strong></code>.
+
+            </p>However, these may not be the only functions you implement. For example, when parsing
+            and handling input or output redirection, it may be better to write separate functions dedicated to
+            these tasks.</p>
+
+            <h4>Some programming tips</h4>
+            <p>Here are some important considerations to keep in mind when implementing the new functions.</p>
+            <ul>
+                <li>Break down the program-launching logic into smaller, purpose-specific functions. For example,
+                    consider writing functions like <code><strong>child_with_output_redirected</strong></code> and
+                    <code><strong>child_with_input_redirected</strong></code>, which can be called from within
+                    <code><strong>launch_program_with_redirection</strong></code>. (Just as
+                    <code><strong>child</strong></code> is called from <code><strong>launch_program</strong></code>.)
+                </li>
+                <li>Handle parsing tasks—such as locating redirection operators—in separate, well-defined functions to
+                    keep your code organized and modular.</li>
+                <li>The key system call in this context is <code><strong>dup2</strong></code>, which is used to
+                    duplicate file descriptors for input or output redirection.
+                    <ul>
+                        <li>Review Lecture 3 for an explanation of how <code><strong>dup2</strong></code> is used.</li>
+                        <li>Consult the <code><strong>man</strong></code> page for <code><strong>dup</strong></code> to
+                            learn more about <code><strong>dup2</strong></code> and its related system calls.</li>
+                        <li>In this task, you will use <code><strong>dup2</strong></code> to redirect input and output
+                            streams to the files specified in the command line.</li>
+                    </ul>
+                <li>Use the <code><strong>open</strong></code> system call to access the input or output file
+                    before redirecting streams with <code><strong>dup2</strong></code>. Make sure to specify the
+                    appropriate flags such as <code>O_RDONLY</code>, <code>O_WRONLY</code>, or
+                    <code>O_CREAT</code> as needed.
+                    <ul>
+                        <li>Note that the <code>&gt;</code> operator creates the output file if it doesn't exist, or
+                            overwrites it if it does. The <code>&gt;&gt;</code> operator appends to the file, and also
+                            creates it if it doesn't exist.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h4>Simplifying assumption</h4>
+            <p>To keep things simple for now, your code may only handle commands that use a single redirection
+                operator.</p>
+            <p>For example, commands like the following, that involve both input and output redirection, do not need to
+                be supported.</p>
+            <div class="code-container" data-filename="inline">
+                <pre class="language-bash"><code>$ sort &lt; txt/phrases.txt &gt; txt/sorted_output.txt</code></pre>
+            </div>
+
+            <h4>Test your code thoroughly</h4>
+            <p>With redirection in place, test your program thoroughly by running a number of commands with redirection.
+            </p>
+            <p>As a starting point, here is a short list of commands that you can run to test
+                <code><strong>s3</strong></code> at this stage.
+            </p>
+            <table border="1" cellpadding="6" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Test Command</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>ls</strong> &gt; txt/folder_contents.txt</td>
+                        <td>Lists the contents of the current folder and writes the output to a file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ls</strong> -R &gt; txt/folder_contents.txt</td>
+                        <td>Recursively lists all files and folders and writes the output to a file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>echo</strong> "=== Full-Year Calendar ===" &gt; txt/calendar.txt</td>
+                        <td>Writes a heading into the calendar file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cal</strong> -y &gt;&gt; txt/calendar.txt</td>
+                        <td>Appends the full-year calendar to the calendar file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>tac</strong> txt/phrases.txt &gt; txt/phrases_reversed.txt</td>
+                        <td>Reverses the lines in the file and writes them to a new file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>sort</strong> txt/phrases.txt &gt; txt/phrases_sorted.txt</td>
+                        <td>Sorts the lines in the file and writes them to a new file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>head</strong> -n 5 txt/phrases.txt &gt;&gt; txt/phrases_sorted.txt</td>
+                        <td>Appends the first 5 lines of the file to an existing sorted file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>wc</strong> txt/phrases.txt &gt; txt/phrases_stats.txt</td>
+                        <td>Counts lines, words, and characters in the file and writes the result</td>
+                    </tr>
+                    <tr>
+                        <td><strong>grep</strong> June &lt; txt/calendar.txt</td>
+                        <td>Searches for lines containing "June" in the calendar file</td>
+                    </tr>
+                    <tr>
+                        <td><strong>tr</strong> a-z A-Z &lt; txt/phrases.txt</td>
+                        <td>Converts lowercase letters to uppercase from the input file</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="p3">
+            <h3><small>3. </small>Support for <code><strong>cd</strong></code></h3>
+            <p>At this point, if you enter the following command in your shell, it will appear to run but will not have
+                the intended effect. (We assume that there is a directory named <code>txt</code> in your current working
+                directory.)</p>
+
+            <div class="code-container" data-filename="inline">
+                <pre class="language-bash"><code>$ cd txt</code></pre>
+            </div>
+
+            <p>This is because <code><strong>cd</strong></code> is a shell built-in command, not a standalone binary
+                that can be launched as a child process.</p>
+
+            <p>This design choice makes sense: if a child process were to load a hypothetical
+                <code><strong>cd</strong></code> binary and change its directory, it would affect only the child
+                process. The parent shell's working directory would remain unchanged, which defeats the purpose of using
+                <code><strong>cd</strong></code>.
+            </p>
+
+            <p>To implement <code><strong>cd</strong></code> correctly, it must be treated as a special case within your
+                shell and executed in the main process using the <code><strong>chdir()</strong></code> system call.</p>
+            <p>As always, look up the <code><strong>man</strong></code> page for <code><strong>chdir</strong></code> to
+                see how it works. In short, the parameters one expects to pass to <code><strong>cd</strong></code> are
+                passed to <code><strong>chdir</strong></code>—namely, the directory to which we want to change. This
+                includes the special <code><strong>.</strong></code> and <code><strong>..</strong></code> directories,
+                which can be passed directly to the <code><strong>chdir</strong></code> system call as parameter.</p>
+
+            <h4>Home and previous directory features</h4>
+            <p>Some <code><strong>cd</strong></code> arguments are special. Namely, when
+                <code><strong>cd</strong></code> is used without any arguments, it should change the directory to the
+                user's home. When it is used with <code><strong>-</strong></code>, it should change to the previous
+                directory. These behaviors will need to be implemented in your code, as
+                <code><strong>chdir</strong></code> has no memory of the previous directory and does nothing when given
+                an empty argument.
+            </p>
+
+            <h4>Updating the shell prompt</h4>
+            <p>It would be helpful to print the current working directory as part of the shell prompt. To do this, use
+                the <code><strong>getcwd</strong></code> function to get the current working directory. Look up the
+                <code><strong>man</strong></code> page
+                for <code><strong>getcwd</strong></code> to see how it works. Then add relevant code to
+                <code><strong>construct_shell_prompt</strong></code>.
+            </p>
+
+            <p>
+                After this, depending upon your current path, the shell prompt may look something like:
+                <code><strong>[/projects/s3/ s3]$</strong></code>.
+            </p>
+
+            <h4>The new s3main.c</h4>
+
+            <p>The following is the updated state of <code><strong>s3main.c</strong></code>:</p>
+            <div class="code-container" data-filename="../c/s3main_3.c">
+                <pre><code class="language-c"></code></pre>
+            </div>
+
+            <p>Implement the necessary functions to make this <code><strong>main</strong></code> function work.</p>
+            <p> As the <code><strong>cd</strong></code> command is executed, the shell prompt should update to reflect
+                the new current working directory. As mentioned above, this can be done by adding appropriate code to
+                <code><strong>construct_shell_prompt</strong></code>.
+            </p>
+
+        </div>
+
+        <div id="p4">
+            <h3><small>3. </small>Commands with Pipes</h3>
+            <p>For this section, please refer to Lecture 3 regarding the use of the
+                <code><strong>pipe()</strong></code> system call, which is used for inter-process communication in
+                combination
+                with the <code><strong>dup2()</strong></code> system call.
+            </p>
+
+            <p>One of the most useful features of a shell is its ability to execute a <strong>pipeline of
+                    commands</strong> (hereafter
+                referred to simply as a <strong>pipeline</strong>). This allows the output of one command (on the left)
+                to be passed as
+                input to another command (immediately to its right, following a pipe symbol
+                <code><strong>'|'</strong></code>). Here is
+                an example:
+            </p>
+
+            <div class="code-container" data-filename="inline">
+                <pre class="language-bash"><code>$ cat txt/phrases.txt | sort &gt; txt/phrases_sorted.txt</code></pre>
+            </div>
+
+            <p>Let us first describe what is happening in this pipeline at a higher level:</p>
+            <ul>
+                <li>The <code><strong>cat</strong></code> command
+                    (a child process of the shell) reads the data from the specified file and writes it to
+                    its standard output stream, <code><strong>stdout</strong></code>.
+                </li>
+                <li>However, with piping implemented, this
+                    output is not sent directly to the terminal. Instead, the <code><strong>stdout</strong></code> of
+                    <code><strong>cat</strong></code> is redirected to the write end of a pipe.
+                </li>
+                <li>The <code><strong>sort</strong></code> process then reads its input from the
+                    standard input stream, <code><strong>stdin</strong></code>.
+                </li>
+                <li>However, with piping implemented, this input stream is redirected to the read end of the pipe — the
+                    same pipe that
+                    <code><strong>cat</strong></code> has written into.
+                </li>
+                <li>Therefore, <code><strong>sort</strong></code>
+                    receives the output of <code><strong>cat</strong></code> as its input.
+                </li>
+                <li>After this,
+                    <code><strong>sort</strong></code> orders the data and writes its output to the specified file,
+                    due to the redirection operator implemented in the shell.
+                </li>
+            </ul>
+
+            <h4>Important considerations</h4>
+            <p>The important questions to consider are these: where are the pipes created, and where does the
+                redirection happen? It is left to you to find the answers.</p>
+
+            <p>Importantly, remember that a portion of the shell's code that runs after the
+                <code><strong>fork()</strong></code> call but before <code><strong>execvp()</strong></code> executes
+                within the child process. This means you can implement the necessary logic in both the parent and the
+                child sections of your launch methods.
+            </p>
+
+            <p>Your code should handle pipelines of any length. For example, consider the following pipeline with four
+                component commands. Your shell should be able to process this and similar command lines (example outputs
+                are also shown in this case).</p>
+
+            <div class="code-container" data-filename="inline">
+                <pre class="language-bash">
+<code>$ tr a-z A-Z &lt; txt/phrases.txt | grep BURN | sort | wc -l</code>
+<code>3</code>
+<code>$ ps aux | grep python | sort -k 3 -nr | head</code>
+<code>sbaig            34246   0.0  0.0 408103584   1120 s005  S+   12:56PM   0:00.00 grep python</code>
+</pre>
+            </div>
+
+            <p>An interesting question to consider is: what happens if one of the commands in the pipeline (other than
+                the last) redirects its output to a file using the <code>&gt;</code> or <code>&gt;&gt;</code> operators?
+                In that case, the pipeline would still execute, but the data stream would effectively be 'broken' at the
+                point where the command redirects its output to a file. A separate stream could continue from that point
+                onward, but it would no longer receive data from the previous command through the pipe.</p>
+
+            <h4>Some programming tips</h4>
+
+            <p>In this part, I do not provide the updated <code><strong>main</strong></code> directly.
+                However, here are some guidelines:</p>
+
+            <ul>
+                <li>Write a function to detect whether a command contains pipes.</li>
+                <li>Write a function to tokenize the piped commands (each of which can then be parsed).</li>
+                <li>Write a function to launch the piped commands. In this function, try to reuse the functions you have
+                    already written — namely, <code><strong>launch_program</strong></code>,
+                    <code><strong>launch_program_with_redirection</strong></code>, <code><strong>child</strong></code>,
+                    and <code><strong>child_with_redirection</strong></code>, etc.
+                </li>
+                <li>The above-mentioned functions would need to be augmented, with extra arguments related to the
+                    pipelining functionality added to them. These
+                    arguments may be set to <code><strong>NULL</strong></code> or <code><strong>0</strong></code> when
+                    passed in the
+                    non-pipelined cases. This is a standard practice in C, which does not allow default argument values
+                    or function overloading.</li>
+            </ul>
+        </div>
+
+        <div id="p5">
+            <h3><small>5. </small>Batched Commands</h3>
+
+            <p>A useful feature of the shell is its ability to execute a batch of multiple, possibly piped or
+                standalone, commands independently, one after
+                another, regardless of whether the previous succeeds or fails.</p>
+
+            <p>This is typically done using the semicolon (;) operator, which separates independent units in a batch.
+            </p>
+
+            <p>Here is an example:</p>
+
+            <div class="code-container" data-filename="inline">
+                <pre
+                    class="language-bash"><code>$ mkdir results ; cat txt/phrases.txt | sort | tac > results/rev_sort_phr.txt ; echo "Processing complete."</code></pre>
+            </div>
+
+            <p>The first to execute is <code><strong>mkdir</strong></code>, which creates a new directory named
+                results. Next, <code><strong>cat</strong></code>, <code><strong>sort</strong></code>, and
+                <code><strong>tac</strong></code> are used in a pipeline to read, sort, and reverse the contents of
+                txt/phrases.txt, with the final output written to a file inside the newly created directory.
+                Finally, echo is used to print a confirmation message. All these parts execute independently regardless
+                of the success of others.
+            </p>
+
+            <p>Add the necessary code to support batched command execution. As always, consider writing purpose-specific
+                functions and reusing the functions you have already implemented wherever possible.</p>
+        </div>
+
+        <div id="p6">
+            <h3><small>6. Proposed Extension 1: </small>Subshells</h3>
+            <p>Consider the following command line:</p>
+
+            <div class="code-container" data-filename="inline">
+                <pre
+                    class="language-bash"><code>$ echo "Start processing..." ; (cd /var/log ; cat syslog | sort > sorted_syslog.txt) ; echo "Finished writing sorted log." ; date</code></pre>
+            </div>
+
+            <p>This command line prints a start message using <code><strong>echo</strong></code>, processes and sorts
+                the contents of the syslog file in the /var/log directory using a subshell (everything inside the
+                parentheses is considered a subshell) with <code><strong>cd</strong></code>,
+                <code><strong>cat</strong></code>, and <code><strong>sort</strong></code>, saves the result to a file,
+                prints a completion message with <code><strong>echo</strong></code>, and displays the current date using
+                <code><strong>date</strong></code>.
+            </p>
+
+            <p>Note also that a subshell itself could appear as part of a pipeline. Consider the following example:</p>
+
+            <div class="code-container" data-filename="inline">
+                <pre class="language-bash"><code>$ (cd /var/log ; cat syslog) | sort | head</code></pre>
+            </div>
+
+            <p>This should not be surprising, as a subshell is, after all, just like any other process launched by the
+                shell. It can read from standard input and write to standard output, which allows it to fit naturally
+                into a pipeline alongside other commands.</p>
+
+            <h4>So, what is a subshell?</h4>
+            <p>A subshell is simply a child process of the shell, just like any other command the shell runs. This child
+                is a complete shell process in itself. It is created using <code><strong>fork</strong></code>, and the
+                shell binary is loaded into it using <code><strong>execvp</strong></code> when needed.</p>
+            <p>So, to support subshells correctly, the shell program should be able to process its
+                <code><strong>argc</strong></code> and <code><strong>argv</strong></code> arguments appropriately. This
+                ensures that when the shell is spawned as a child process, it can correctly interpret and execute the
+                command or command group passed to it.
+            </p>
+
+            <h4>What is the point of having subshells?</h4>
+            <p>Subshells are useful because they let you run a group of commands without affecting the main shell.</p>
+            <p>For example, if you change the directory, or set a variable inside a subshell, those changes do not carry
+                over once the subshell finishes.</p>
+            <p> This is helpful when you want to perform a task in a temporary environment, such as changing to a
+                different folder, processing some files, and then automatically returning to your original location.</p>
+
+            <p>It is also useful in scripting, where running certain parts of a script in isolation can reduce side
+                effects and improve security by limiting how long changes stay active.</p>
+
+            <h4>Simplifying Assumption</h4>
+            <p>To simplify the implementation, you may assume for now that subshells are not nested. In other words, the
+                original command may contain subshells, but those subshells will not themselves contain further
+                subshells. While real shells do support nested subshells, this assumption keeps things manageable at
+                this stage.</p>
+
+
+            <div id="p7">
+                <h3><small>7. Proposed Extension 2: </small>Nested Subshells</h3>
+                <p>Quite simply: relax the restriction imposed on subshell nesting in PE1. Subshells may now be nested
+                    to any level.</p>
+                <p>This will require some more effort during parsing, and you may find it helpful to use a stack to
+                    track matching parentheses -- etc.</p>
+            </div>
+
+            <div id="p8">
+                <h3><small>8. </small>Further Enhancements</h3>
+
+                <p>We have covered much of the fundamental behavior expected from a modern shell. However, there are
+                    many interesting enhancements that can be explored. I do not expect these to be implemented for this
+                    assignment, but
+                    are listed here for those who may want to take the project further just for fun.</p>
+
+                <p>One such feature is <strong>globbing</strong>, which allows wildcard-based pattern matching for
+                    filenames using characters like <code>*</code> and <code>?</code>.</p>
+
+                <p>You can also explore <strong>foreground and background job control</strong>, allowing commands to run
+                    concurrently (although we will be studying concurrency and its related issues later in the module),
+                    along with the ability to bring jobs to the foreground or send them to the background
+                    using <code><strong>fg</strong></code> and <code><strong>bg</strong></code>.</p>
+
+                <p>Another enhancement is supporting <strong>both input and output redirection in the same command
+                        line</strong>. For example:</p>
+
+                <div class="code-container" data-filename="inline">
+                    <pre class="language-bash"><code>$ sort &lt; unsorted.txt &gt; sorted.txt</code></pre>
+                </div>
+
+                <p>You may consider adding support for <strong>alternative syntax for tee-like behavior</strong>, or
+                    expanding piping capabilities to allow for more complex routing of data streams.</p>
+
+                <p>On the user interface side, features such as <strong>command history</strong>, <strong>tab
+                        completion</strong>, and <strong>custom prompts</strong> can greatly improve usability.</p>
+            </div>
+
+            <hr>
+            <p style="text-align: center; font-style: color: #555; margin-top: 2em;">
+                — End of Statement —
+            </p>
+        </section>
+</body>
+
+</html>

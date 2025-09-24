@@ -1,0 +1,14 @@
+sfree(mem_ptr)
+
+    STEP 1: 
+            IF mem_ptr is NULL {
+                return
+            }
+    
+    STEP 2:
+            // Make any necessary initializations 
+            Compute the address of the metadata header immediately preceding mem_ptr
+    
+    STEP 3: 
+            Insert the freed block at the head of the freelist
+            return

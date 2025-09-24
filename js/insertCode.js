@@ -2,6 +2,10 @@ function loadCode() {
     const codeContainers = document.querySelectorAll('.code-container');
     codeContainers.forEach(container => {
         const fileName = container.getAttribute('data-filename');
+
+        if (!fileName || fileName.trim().toLowerCase() === 'inline') {
+            return;
+        }
         
         fetch(fileName)
             .then(response => response.text())

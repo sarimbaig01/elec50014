@@ -1,0 +1,26 @@
+smalloc(byte_count)
+
+    STEP 1:
+            IF the freelist head is NULL {
+                Request a block of memory from the operating system using get_mem_block
+                IF the request fails {
+                    return NULL
+                }
+                Initialize the freelist with this new memory block
+            }
+
+    STEP 2:
+            // Make any necessary initializations
+
+            Traverse the free list and allocate memory in the first free block 
+            with enough space for the request
+
+    STEP 3:
+            IF the request cannot be satisfied {
+                return NULL
+            } ELSE {
+                Split the chosen free block into an allocated block and a remainder
+                Set the allocated block’s size to byte_count (this becomes metadata)
+                Set its next pointer to NULL
+                return a pointer to the memory region just after the block’s header
+            }

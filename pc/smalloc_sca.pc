@@ -1,0 +1,30 @@
+smalloc(byte_count)
+
+    STEP 0:
+            Pick a zone by size: tiny, small, or medium, based
+            on the value of byte_count
+
+    STEP 1:
+            IF that zone’s freelist is empty{
+                 Create its arena (obtain through mmap)
+                 Initialize its freelist as one big free block
+                 (Do this once per zone as needed)
+            }
+
+    STEP 2:
+            Traverse the freelist (of the chosen zone) and allocate memory in a block 
+            with enough space for the request
+
+            IF none found{
+                Escalate the request to the next (larger) zone
+            } 
+
+    STEP 3:
+            IF no zone can satisfy the request {
+                return NULL
+            } ELSE {
+                Split the chosen free block into an allocated block and a remainder
+                Set the allocated block’s size to byte_count (this becomes metadata)
+                Set its next pointer to NULL
+                return a pointer to the memory region just after the block’s header
+            }

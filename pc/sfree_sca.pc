@@ -1,0 +1,19 @@
+sfree(mem_ptr)
+
+    STEP 1:
+            IF mem_ptr is NULL { 
+                return
+            }
+
+    STEP 2:
+            Compute the address of the block header just before mem_ptr
+
+    STEP 3:
+            Identify the zone by address (tiny, small, or medium)
+
+    STEP 4:
+            Insert the block into that zone’s freelist in address order
+            
+    STEP 5:
+            Merge with adjacent free blocks (if any)
+            return
