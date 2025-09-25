@@ -1,4 +1,0 @@
-a
-bash_coms.txt
-scripting notes
-t.txt
