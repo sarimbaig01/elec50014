@@ -155,7 +155,7 @@ void *ptr3 =  smalloc(10);
         <p>Figure 1 depicts the situations before and after the <code><strong>sfree</strong></code> call.</p>
 
         <figure style="text-align: center;">
-            <img src="../img/fragmentation1.png" alt="fragmentation-example" style="max-width: 50%; height: auto;">
+            <img src="img/fragmentation1.png" alt="fragmentation-example" style="max-width: 50%; height: auto;">
             <figcaption>Figure 1: The state of the memory block after three <code><strong>smalloc</strong></code>
                 and one <code><strong>sfree</strong></code> call.</figcaption>
         </figure>
@@ -173,7 +173,7 @@ void *ptr3 =  smalloc(10);
         <p>The resultant state of the memory is shown in Figure 2.</p>
 
         <figure style="text-align: center;">
-            <img src="../img/fragmentation2.png" alt="fragmentation-example" style="max-width: 50%; height: auto;">
+            <img src="img/fragmentation2.png" alt="fragmentation-example" style="max-width: 50%; height: auto;">
             <figcaption>Figure 2: The state of the memory block after a second <code><strong>sfree</strong></code> call.
             </figcaption>
         </figure>
@@ -242,7 +242,7 @@ void *ptr3 =  smalloc(10);
         </p>
 
         <figure style="text-align: center;">
-            <img src="../img/freelist1.png" alt="fragmentation-example" style="max-width: auto; height: auto;">
+            <img src="img/freelist1.png" alt="fragmentation-example" style="max-width: auto; height: auto;">
             <figcaption>Figure 3: (a) The initial state of the memory block and <code><strong>freelist</strong></code>.
                 (b) After one allocation of 100 bytes (<code><strong>ptr1 = smalloc(100)</strong></code>), the initial
                 free block is <code><strong>split</strong></code>
@@ -268,7 +268,7 @@ void *ptr3 =  smalloc(10);
             see the effects of allocation and deallocation on the <code><strong>freelist</strong></code>.</p>
 
         <figure style="text-align: center;">
-            <img src="../img/freelist2.png" alt="fragmentation-example" style="max-width: auto; height: auto;">
+            <img src="img/freelist2.png" alt="fragmentation-example" style="max-width: auto; height: auto;">
             <figcaption>Figure 4: (a) Another allocation of 100 bytes.
                 (b) Deallocation at ptr1 (the newly freed block is reclaimed into the
                 <code><strong>freelist</strong></code>). The brown arrow shows the
@@ -309,7 +309,7 @@ void *ptr3 =  smalloc(10);
             in a function called <code><strong>get_mem_block</strong></code> which provides a nice and simple interface
             for reuse (if required).</p>
 
-        <div class="code-container" data-filename="../c/mmap_c.c">
+        <div class="code-container" data-filename="c/mmap_c.c">
             <pre><code class="language-c"></code></pre>
         </div>
 
@@ -328,7 +328,7 @@ void *ptr3 =  smalloc(10);
         </p>
 
 
-        <div class="code-container" data-filename="../c/init_freelist.c">
+        <div class="code-container" data-filename="c/init_freelist.c">
             <pre><code class="language-c"></code></pre>
         </div>
 
@@ -344,7 +344,7 @@ void *ptr3 =  smalloc(10);
             out the details yourself.</p>
 
         <p>The <code><strong>smalloc</strong></code> algorithm:</p>
-        <pseudocode src="../pc/smalloc.pc"></pseudocode>
+        <pseudocode src="pc/smalloc.pc"></pseudocode>
 
         <p><strong>Two points to note about the algorithm are as follows:</strong></p>
 
@@ -370,7 +370,7 @@ void *ptr3 =  smalloc(10);
         </p>
 
         <p>The <code><strong>sfree</strong></code> algorithm:</p>
-        <pseudocode src="../pc/sfree.pc"></pseudocode>
+        <pseudocode src="pc/sfree.pc"></pseudocode>
 
         <p>As we can see here, the size of the <code><strong>freelist</strong></code> grows with each deallocation. This
             will not always be the case, as we will see in the next sections. For now, however, we should implement this
@@ -439,7 +439,7 @@ void *ptr3 =  smalloc(10);
                 the sample output that follows.
             </p>
 
-            <div class="code-container" data-filename="../c/basic_allocation_test.c">
+            <div class="code-container" data-filename="c/basic_allocation_test.c">
                 <pre><code class="language-c"></code></pre>
             </div>
 
@@ -448,7 +448,7 @@ void *ptr3 =  smalloc(10);
                 constant defined in <code><strong>allocator.h</strong></code>).</p>
 
             <figure style="text-align: left;">
-                <img src="../img/basic_test_output.png" alt="basic_test" style="max-width: 80%; height: 100%;">
+                <img src="img/basic_test_output.png" alt="basic_test" style="max-width: 80%; height: 100%;">
                 <figcaption>Figure 5: An output of the basic test program for <code><strong>MEM_SIZE</strong></code> =
                     1024,
                     <code><strong>N_ALLOCS</strong></code> = 45, <code><strong>MAX_REQ_SIZE</strong></code> = 16
@@ -529,7 +529,7 @@ void *ptr3 =  smalloc(10);
             <p>Figure 6 below shows a sample output from the stress-test.</p>
 
             <figure style="text-align: left;">
-                <img src="../img/stress_test_output.png" alt="basic_test" style="max-width: 50%; height: auto;">
+                <img src="img/stress_test_output.png" alt="basic_test" style="max-width: 50%; height: auto;">
                 <figcaption>Figure 6: An output of the stress-test program for <code><strong>MEM_SIZE</strong></code> =
                     10 * 1024 * 1024 (10 MB), and other parameters as specified in
                     <code><strong>allocation_stress_test.c</strong></code>.
@@ -656,7 +656,7 @@ void *ptr3 =  smalloc(10);
                 browser tab's PID, I see a large memory map, a small part of which is shown in Figure 7 below.</p>
 
             <figure style="text-align: left;">
-                <img src="../img/vmmap_mac.png" alt="basic_test" style="max-width: 90%; height: auto;">
+                <img src="img/vmmap_mac.png" alt="basic_test" style="max-width: 90%; height: auto;">
                 <figcaption>Figure 7: A tiny part of the <code><strong>$ vmmap -summary &lt;PID&gt;</strong></code>
                     output.
                 </figcaption>
@@ -682,10 +682,10 @@ void *ptr3 =  smalloc(10);
             <p>Following are the algorithms augmented to include the size-class arena feature.</p>
 
             <p>The updated <code><strong>smalloc</strong></code> algorithm:</p>
-            <pseudocode src="../pc/smalloc_sca.pc"></pseudocode>
+            <pseudocode src="pc/smalloc_sca.pc"></pseudocode>
 
             <p>The updated <code><strong>sfree</strong></code> algorithm:</p>
-            <pseudocode src="../pc/sfree_sca.pc"></pseudocode>
+            <pseudocode src="pc/sfree_sca.pc"></pseudocode>
 
             <h4>Zone sizes and size boundaries</h4>
             <p>For consistency, we keep the total memory size to 10 MB, setting the zone sizes to 1 MB (TINY), 3 MB
