@@ -703,41 +703,38 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Keep ToC pinned at top for small screens */
+/* Phones: ToC as a clean vertical list */
 @media (max-width: 768px) {
   .toc {
     position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    margin: 0;
-    border-radius: 0;
-    z-index: 100;              /* stay above text */
-    background-color: #fffaf0; /* same theme color */
-    border-bottom: 1px solid #d8cfc4;
-  }
-
-  /* Optional: make it look like a simple top bar */
-  .toc h5 {
-    display: none;             /* hide title to save space */
-  }
-  .toc a {
-    display: inline-block;
+    margin: 0 -12px 12px -12px;
     padding: 10px 12px;
-    margin: 0 4px 0 0;
-    border-left: none;
-    border-bottom: 2px solid transparent;
-    font-size: 0.95rem;
+    border-radius: 0;
+    border-bottom: 1px solid #d8cfc4;
+    background: #fffaf0;
+    z-index: 100;
   }
-  .toc a:hover {
-    border-bottom: 2px solid #a37b5e;
-    background-color: transparent;
+  .toc h5 { display: none; }
+
+  .toc-content {
+    display: block;      /* stack items */
+    max-height: none;    /* no internal scroll */
   }
 
-  /* Slight top padding so first content isn’t hidden under sticky ToC */
-  section.statement {
-    padding-top: 70px;
+  .toc a {
+    display: block;      /* one per line */
+    padding: 10px 12px;
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid #eee;
+    text-decoration: none;
   }
+
+  .toc a:last-child {
+    border-bottom: 0;
+  }
+
+  /* Ensure content isn't hidden under sticky bar */
+  section.statement { padding-top: 70px; }
 }
-
