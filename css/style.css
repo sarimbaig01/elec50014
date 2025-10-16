@@ -738,3 +738,17 @@ html {
   /* Ensure content isn't hidden under sticky bar */
   section.statement { padding-top: 70px; }
 }
+
+/* Restore "Table of Contents" heading on small screens */
+@media (max-width: 768px) {
+  .toc h5 {
+    display: block;        /* show it again */
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 4px 0 8px 0;
+    text-align: center;    /* optional: center it */
+    color: #6a4e3d;        /* matches your theme */
+    border-bottom: 1px solid #e0d6c8;
+    padding-bottom: 4px;
+  }
+}
