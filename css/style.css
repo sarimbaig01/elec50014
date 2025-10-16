@@ -702,3 +702,42 @@ button:focus-visible {
 html {
   scroll-behavior: smooth;
 }
+
+/* Keep ToC pinned at top for small screens */
+@media (max-width: 768px) {
+  .toc {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    z-index: 100;              /* stay above text */
+    background-color: #fffaf0; /* same theme color */
+    border-bottom: 1px solid #d8cfc4;
+  }
+
+  /* Optional: make it look like a simple top bar */
+  .toc h5 {
+    display: none;             /* hide title to save space */
+  }
+  .toc a {
+    display: inline-block;
+    padding: 10px 12px;
+    margin: 0 4px 0 0;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    font-size: 0.95rem;
+  }
+  .toc a:hover {
+    border-bottom: 2px solid #a37b5e;
+    background-color: transparent;
+  }
+
+  /* Slight top padding so first content isn’t hidden under sticky ToC */
+  section.statement {
+    padding-top: 70px;
+  }
+}
+
