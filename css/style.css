@@ -516,72 +516,189 @@ video::-webkit-media-controls-overlay-enclosure {
   word-break: break-word;
 }
 
+/* ===============================
+   Responsive additions (append)
+   =============================== */
 
+/* Better default line-length on large-but-not-huge screens */
+@media (max-width: 1400px) {
+  section.statement {
+    width: 72%;
+  }
+}
 
+/* === Tablets (≤ 1024px) === */
+@media (max-width: 1024px) {
+  /* Content spans full width; align H1 with content */
+  section.statement {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 24px auto;
+    padding: 16px;
+  }
+  h1.align-with-statement {
+    margin-left: 0;
+    padding: 0 4px;
+    text-wrap: balance;
+  }
 
+  /* Sidebar ToC becomes a top sticky card */
+  .toc {
+    position: sticky;
+    top: 0;
+    left: auto;
+    right: auto;
+    width: auto;
+    max-width: 100%;
+    margin: 0 -20px 16px -20px;  /* bleed to edges to match body padding */
+    padding: 12px 16px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    z-index: 50;
+  }
+  .toc-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 6px 12px;
+    max-height: 40vh;
+    overflow: auto;              /* scroll if ToC is long */
+    -webkit-overflow-scrolling: touch;
+  }
+  .toc h5 {
+    margin-bottom: 8px;
+  }
+  .toc a {
+    padding: 6px 8px;
+    border-left-width: 2px;
+    border-radius: 6px;
+  }
 
+  /* Code containers breathe a bit less */
+  .code-container {
+    margin: 14px 0;
+    padding: 0;
+  }
 
+  /* Two-column code layout stacks */
+  .flex-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .flex-container .code-wrapper {
+    max-width: 100%;
+  }
 
-/* Media queries for mobile devices 
-@media only screen and (max-width: 600px) {
-    body {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        width: 95%;
-        box-sizing: border-box;
-        overflow-x: hidden;
-    }
+  /* Tables scroll horizontally if needed */
+  table,
+  .ptable,
+  .dtable,
+  table.atable,
+  table.ref {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    div.toc {
-        display: none;
-    }
+  /* Slightly smaller headings and nicer measure */
+  h1 { font-size: clamp(1.6rem, 2.5vw, 2rem); }
+  h2 { font-size: clamp(1.25rem, 2.1vw, 1.6rem); }
+  h3 { font-size: clamp(1.05rem, 1.8vw, 1.3rem); }
+  body { line-height: 1.6; }
+}
 
-    section.toc {
-        position: static;
-        order: 0;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        margin: 0;
-        padding: 10px;
-        background-color: #fff;
-    }
+/* === Phones (≤ 768px) === */
+@media (max-width: 768px) {
+  body {
+    padding: 12px;
+  }
 
-    section.statement {
-        position: static;
-        order: 1;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        margin: 0;
-        padding: 10px;
-        background-color: #fff;
-        border: none;
-    }
-}*/
+  section.statement {
+    padding: 14px;
+    border-width: 1px;
+  }
 
-/* Media queries for tablets 
-@media only screen and (min-width: 601px) and (max-width: 900px) {
-    body {
-        padding: 15px;
-    }
+  /* Compact ToC; single column list */
+  .toc {
+    margin: -12px -12px 12px -12px; /* edge-to-edge top card */
+    padding: 10px 12px;
+    border-radius: 0 0 8px 8px;
+  }
+  .toc-content {
+    display: block;
+    max-height: 35vh;
+  }
+  .toc a {
+    margin: 4px 0;
+    padding: 8px 10px;          /* bigger tap targets */
+    font-size: 0.98rem;
+  }
 
-    .code-container {
-        width: 95%;
-        padding: 10px;
-        margin: 15px 0;
-        left: 2.5%;
-    }
+  /* Code blocks: wrap long lines and reduce max height */
+  pre[class*="language-"] {
+    max-height: 300px;
+    white-space: pre-wrap;       /* allow wrapping on narrow screens */
+    word-break: break-word;
+  }
 
-    .toc {
-        right: 10px;
-        width: 200px;
-    }
+  /* Dark console box uses full width */
+  .console {
+    width: 100%;
+    max-width: none;
+    font-size: 13px;
+  }
 
-    .statement {
-        margin-right: 150px;
-    }
-}*/
+  /* Make small tables a bit tighter */
+  .ptable th, .ptable td,
+  .dtable th, .dtable td,
+  table.atable th, table.atable td,
+  table.ref th, table.ref td {
+    padding: 8px 10px;
+    font-size: 0.96rem;
+  }
+
+  /* Pseudocode and code-like boxes fit better */
+  .pseudocode {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  /* Avoid overly long justified rivers on phones */
+  section.statement { text-align: left; }
+}
+
+/* === Very small phones (≤ 480px) === */
+@media (max-width: 480px) {
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.1rem; }
+  h3 { font-size: 1rem; }
+
+  .toc a {
+    padding: 10px 12px;
+    border-left-width: 3px; /* clearer focus on tap */
+  }
+
+  /* Reduce image/caption spacing a touch */
+  figure { margin: 14px auto; }
+  figcaption { font-size: 13px; }
+}
+
+/* === Misc. touch-ups for accessibility and focus === */
+@media (hover: none) {
+  .toc a:hover {
+    background-color: inherit;  /* avoid hover color flashes on mobile */
+  }
+}
+
+.toc a:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #a37b5e;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Smooth anchor scrolling for in-page links */
+html {
+  scroll-behavior: smooth;
+}
