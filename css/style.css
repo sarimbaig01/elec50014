@@ -752,3 +752,11 @@ html {
     padding-bottom: 4px;
   }
 }
+
+/* --- Fix: prevent sticky ToC from covering anchor targets on phones --- */
+@media (max-width: 768px) {
+  [id] {
+    scroll-margin-top: 80px;  /* Adjust if the ToC bar is taller or shorter */
+  }
+}
+
