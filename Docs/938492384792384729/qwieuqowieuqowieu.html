@@ -447,7 +447,7 @@
                 <li>The server’s linked list of clients is accessed by multiple threads and must implement mutual
                     exclusion around critical sections.</li>
 
-                <li>For this purpose you could use the pthread implementation of a <strong>reader–writer lock</strong>. If instead you prefer using condition variables or semaphores directly, you can do that as well. For the reader-writer lock, please explore the functions: <strong><code>pthread_rwlock_rdlock</code></strong>, <strong><code>pthread_rwlock_wrlock</code></strong>, and <strong><code>pthread_rwlock_unlock</code></strong>.
+                <li>For this purpose you could use the pthread implementation of a <strong>reader–writer lock</strong>. If instead you prefer using condition variables, or semaphores, to build your own reader-writer lock (as described in lecture 8), you can do that as well. For the pthread reader-writer lock, please explore the functions: <strong><code>pthread_rwlock_rdlock</code></strong>, <strong><code>pthread_rwlock_wrlock</code></strong>, and <strong><code>pthread_rwlock_unlock</code></strong>.
                     <ul>
                         <li>For example, <strong>reader threads</strong> include those that:
                             <ul>
