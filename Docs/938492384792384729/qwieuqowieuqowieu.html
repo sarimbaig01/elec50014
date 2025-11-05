@@ -71,6 +71,8 @@
                 relatively more freedom to decide what functions to implement and how to structure your overall
                 solution.</p>
 
+            <p>As with assignment 1, for a 70% mark on this assignment you need to implement the functionalities excluding the PEs correctly. For marks in the range 70–100%, PEs should be implemented.</p>
+
             <p>Let's begin!</p>
         </div>
 
@@ -445,15 +447,12 @@
                 <li>The server’s linked list of clients is accessed by multiple threads and must implement mutual
                     exclusion around critical sections.</li>
 
-                <li>A custom <strong>reader–writer lock</strong> should be implemented (Note: using the inbuilt rw lock
-                    from pthreads is not
-                    allowed, instead you must use mutexes and condition variables (or semaphores) as described in
-                    lectures):
+                <li>For this purpose you could use the pthread implementation of a <strong>reader–writer lock</strong>. If instead you prefer using condition variables or semaphores directly, you can do that as well. For the reader-writer lock, please explore the functions: <strong><code>pthread_rwlock_rdlock</code></strong>, <strong><code>pthread_rwlock_wrlock</code></strong>, and <strong><code>pthread_rwlock_unlock</code></strong>.
                     <ul>
                         <li>For example, <strong>reader threads</strong> include those that:
                             <ul>
                                 <li>Broadcast messages to all connected clients</li>
-                                <li>Look up specific client for <code>sayto</code></li>
+                                <li>Look up a specific client for <code>sayto</code></li>
                                 <li>Read muted clients of a specific client</li>
                             </ul>
                         </li>
