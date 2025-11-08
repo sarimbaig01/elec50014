@@ -467,7 +467,7 @@
                 </li>
             </ul>
 
-            <h4 id="p2.4">User interface requirements</h4>
+            <h4 id="p2.4">User interface options</h4>
             <p>Figure 2 below shows the user interface expected for the chat_client process.</p>
             <figure style="text-align: center;">
                 <img src="img/chat_ui.png" alt="Chat Client Interface" style="max-width: 50%; height: auto;">
@@ -479,9 +479,19 @@
                 is typing their message.</p>
 
             <p>This part of the assignment is information-heavy, i.e., you should look up appropriate references
-                (including AI tools) to learn how functions like <code>printf</code> can be used to print at specific
+               to learn how functions like <code>printf</code> can be used to print at specific
                 areas of the screen.
                 You may also explore suitable C libraries that can help create such an interface.</p>
+            
+            <h5>Alternative option</h4>
+           <p>Alternatively, you can simplify the interface by using two terminal windows. In this case, write all incoming chat messages to a separate text file called **iChat.txt**. This means you will need to open the file for writing and append each new message as it arrives. This way, the input reading thread can keep hold of one terminal window while the incoming chat is directed to the file. You can then view the chat live by running a command such as <strong><code>tail -f iChat.txt</code></strong> in the other terminal window.</p>
+            <p>Figure 3 below shows a demo of what this interface might look like inside vscode.</p>
+            <figure style="text-align: center;">
+    <video src="mov/int_demo.mp4" controls style="max-width: 50%; height: auto;">
+        Your browser does not support the video tag.
+    </video>
+    <figcaption>Figure 3: Interaction demo of the chat client</figcaption>
+</figure>            
         </div>
 
         <div id="p3">
